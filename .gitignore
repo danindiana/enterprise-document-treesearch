@@ -1,0 +1,69 @@
+# Compiled binaries
+IDDFileSearch
+IDDFileSearch_ExceptionHandled
+IDDFileSearch_CmdLine
+IDDFileSearch_Extension
+IDDFileSearch_Extension_Concurrent
+BFSFileSearch
+IterativeDeepening
+
+# Object files
+*.o
+*.obj
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Core dumps
+core
+core.*
+
+# Editor temporary files
+*~
+*.swp
+*.swo
+.*.swp
+.*.swo
+
+# IDE files
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+
+# Build directories
+build/
+bin/
+obj/
+
+# CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+Makefile.cmake
+
+# Dependency directories
+.deps/
+.libs/
+
+# Testing
+test_results/
+*.test
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*.backup
