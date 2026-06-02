@@ -1,0 +1,24 @@
+digraph dataflow {
+  rankdir=LR; bgcolor="white"; pad=0.4; ranksep=0.5;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Runtime data flow — a single search invocation\n./IDDFileSearch_Extension .pdf /path 5";
+  node [fontname="DejaVu Sans", fontsize=11, shape=box, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=10];
+
+  args [shape=oval, fillcolor="#d1fae5", label="argv\next=.pdf · root=/path · maxDepth=5"];
+  parse[fillcolor="#eff6ff", label="parse + validate args"];
+  eng  [fillcolor="#dbeafe", label="init traversal engine\n(IDDFS or BFS)"];
+  trav [fillcolor="#dbeafe", label="traverse: readdir / stat\nwithin depth limit"];
+  gate [shape=diamond, fillcolor="#fef3c7", label="depth ≤ limit?"];
+  pred [shape=diamond, fillcolor="#fef3c7", label="entry extension\n== target?"];
+  coll [fillcolor="#dbeafe", label="collect match"];
+  out  [shape=oval, fillcolor="#bbf7d0", label="print results → exit code"];
+
+  args->parse->eng->trav->gate;
+  gate->pred [label="yes", color="#047857"];
+  gate->trav [label="no → prune", style=dashed, color="#be123c"];
+  pred->coll [label="yes", color="#047857"];
+  pred->trav [label="no → next entry", style=dashed];
+  coll->trav [style=dashed, label="continue"];
+  trav->out [label="traversal complete", color="#1d4ed8"];
+}

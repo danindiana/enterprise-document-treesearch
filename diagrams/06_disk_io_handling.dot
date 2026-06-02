@@ -1,0 +1,41 @@
+digraph disk_io {
+  rankdir=TB; bgcolor="white"; pad=0.4; ranksep=0.5;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Disk I/O Handling — from disk selection to physical media";
+  node [fontname="DejaVu Sans", fontsize=11, shape=box, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=10];
+
+  subgraph cluster_sel {
+    label="Disk selection (shell)"; style="filled,rounded"; color="#a7f3d0"; fillcolor="#ecfdf5"; fontname="DejaVu Sans";
+    lsblk  [fillcolor="#d1fae5", label="robustDiskSelectSearch.sh\nlsblk → list block devices/mounts"];
+    pick   [shape=diamond, fillcolor="#bbf7d0", label="user selects\nmount point"];
+    valid  [fillcolor="#d1fae5", label="validate mount exists\n+ is readable"];
+    lsblk->pick->valid;
+  }
+
+  subgraph cluster_walk {
+    label="Traversal (C++17 binary)"; style="filled,rounded"; color="#bfdbfe"; fillcolor="#eff6ff"; fontname="DejaVu Sans";
+    iter   [fillcolor="#dbeafe", label="std::filesystem recursive iterate\n(bounded by max-depth)"];
+    perm   [shape=diamond, fillcolor="#fef3c7", label="entry readable?"];
+    skip   [fillcolor="#fde68a", label="catch fs error → skip dir\n(graceful, no abort)"];
+    match  [fillcolor="#dbeafe", label="extension == target? → collect"];
+    iter->perm; perm->skip [label="no (EACCES)", color="#b45309"]; perm->match [label="yes", color="#047857"];
+    skip->iter [style=dashed, label="continue"];
+  }
+
+  subgraph cluster_kernel {
+    label="Kernel & storage"; style="filled,rounded"; color="#fecdd3"; fillcolor="#fff1f2"; fontname="DejaVu Sans";
+    sys    [fillcolor="#ffe4e6", label="syscalls: openat / getdents / statx"];
+    vfs    [fillcolor="#ffe4e6", label="VFS + page/dentry cache"];
+    sched  [fillcolor="#ffe4e6", label="block I/O scheduler\nSATA: mq-deadline · NVMe: none"];
+    media  [shape=cylinder, fillcolor="#fecaca", label="physical media\nHDD (seek-bound) vs SSD/NVMe"];
+    sys->vfs->sched->media;
+  }
+
+  valid->iter [label="hand off root path"];
+  match->sys [style=dashed, label="metadata reads"];
+
+  hint [shape=note, style=filled, fillcolor="#fef3c7", fontsize=10,
+    label="I/O profile: traversal is metadata-bound (readdir/stat), not bandwidth-bound.\nWarm dentry cache helps hugely on re-runs. On HDD, depth-first locality beats\nwide random fan-out; scheduler choice (mq-deadline vs none) matters more than CPU."];
+  media->hint [style=invis];
+}

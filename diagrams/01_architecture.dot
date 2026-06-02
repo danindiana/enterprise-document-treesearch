@@ -1,0 +1,51 @@
+digraph architecture {
+  rankdir=TB; bgcolor="white"; pad=0.4; nodesep=0.35; ranksep=0.55;
+  labelloc="t"; fontsize=20; fontname="DejaVu Sans";
+  label="enterprise-document-treesearch — System Architecture\n(recursive file search by extension: IDDFS vs BFS, C++17 + Chapel)";
+  node [fontname="DejaVu Sans", shape=box, style="filled,rounded", fontsize=11, color="#475569", penwidth=1.2];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=9];
+
+  subgraph cluster_build {
+    label="Build & CI"; style="filled,rounded"; color="#fde68a"; fillcolor="#fffbeb"; fontname="DejaVu Sans";
+    make   [label="Makefile\n(all · quick · clean · test\nscripts · install · uninstall)", fillcolor="#fef3c7"];
+    ci     [label=".github/workflows/build-test.yml\nGitHub Actions (push / PR)", fillcolor="#fef3c7"];
+  }
+
+  subgraph cluster_iface {
+    label="User Interface"; style="filled,rounded"; color="#a7f3d0"; fillcolor="#ecfdf5"; fontname="DejaVu Sans";
+    cli    [label="Direct CLI\n./IDDFileSearch_Extension .pdf /path 5", fillcolor="#d1fae5"];
+    sh     [label="Interactive disk-select wrappers\ndiskSelectSearch.sh\nrobustDiskSelectSearch.sh", fillcolor="#d1fae5"];
+  }
+
+  subgraph cluster_bin {
+    label="C++17 Binaries (search variants)"; style="filled,rounded"; color="#bfdbfe"; fillcolor="#eff6ff"; fontname="DejaVu Sans";
+    base   [label="IDDFileSearch", fillcolor="#dbeafe"];
+    exc    [label="…_ExceptionHandled", fillcolor="#dbeafe"];
+    cmd    [label="…_CmdLine", fillcolor="#dbeafe"];
+    ext    [label="…_Extension", fillcolor="#dbeafe"];
+    conc   [label="…_Extension_Concurrent\n(+pthreads)", fillcolor="#bfdbfe"];
+    bfs    [label="BFSFileSearch", fillcolor="#dbeafe"];
+  }
+
+  subgraph cluster_algo {
+    label="Algorithm Core"; style="filled,rounded"; color="#ddd6fe"; fillcolor="#f5f3ff"; fontname="DejaVu Sans";
+    iddfs  [label="Iterative-Deepening DFS\nengine", fillcolor="#ede9fe"];
+    bfse   [label="Breadth-First Search\nengine", fillcolor="#ede9fe"];
+    chapel [label="Chapel port\nIterativeDeepening.chpl\n(language exploration)", fillcolor="#ede9fe", style="filled,rounded,dashed"];
+  }
+
+  subgraph cluster_plat {
+    label="Platform"; style="filled,rounded"; color="#fecdd3"; fillcolor="#fff1f2"; fontname="DejaVu Sans";
+    fs     [label="std::filesystem\n(readdir / stat / recursive iterate)", fillcolor="#ffe4e6"];
+    pth    [label="POSIX threads\n(libpthread)", fillcolor="#ffe4e6"];
+    vfs    [label="Linux VFS → block layer → disks", fillcolor="#ffe4e6"];
+  }
+
+  make -> base [label="compiles", style=dashed];
+  ci   -> make [label="invokes", style=dashed];
+  sh   -> cli  [label="wraps"];
+  cli  -> ext; cli -> conc; cli -> bfs; cli -> base; cli -> exc; cli -> cmd;
+  base->iddfs; exc->iddfs; cmd->iddfs; ext->iddfs; conc->iddfs; bfs->bfse;
+  chapel->iddfs [style=dotted, label="parallel impl"];
+  iddfs->fs; bfse->fs; conc->pth; fs->vfs;
+}

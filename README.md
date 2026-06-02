@@ -58,6 +58,12 @@ Additionally, [`IterativeDeepening.chpl`](./IterativeDeepening.chpl) provides a 
 
 ---
 
+## Design & Architecture Diagrams
+
+For detailed visual guides of the system architecture, algorithm control flows, variant progression, and runtime data flow, please refer to the **[Diagrams Directory](./diagrams/README.md)**.
+
+---
+
 ## Repository Structure
 
 All implementation code and execution scripts reside in the root directory.
@@ -66,6 +72,9 @@ All implementation code and execution scripts reside in the root directory.
 enterprise-document-treesearch/
 ├── BFSFileSearch.cpp                    # BFS C++ implementation
 ├── CONTRIBUTING.md                      # Contributing guidelines
+├── diagrams/                            # Graphviz DOT sources, SVG, and PNG design diagrams
+│   ├── README.md                        # Diagrams index
+│   └── *.dot, *.png, *.svg              # Sources and renders of the 10 system diagrams
 ├── diskSelectSearch.sh                  # Interactive disk selection utility
 ├── docs/                                # Documentation folder
 │   ├── ARCHITECTURE.md                  # Deep dive into IDDFS & BFS algorithms

@@ -1,0 +1,25 @@
+digraph concurrency {
+  rankdir=TB; bgcolor="white"; pad=0.4; ranksep=0.5;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Concurrent variant — parallel subtree search (conceptual)\nand the I/O-contention caveat";
+  node [fontname="DejaVu Sans", fontsize=11, shape=box, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=10];
+
+  main [fillcolor="#d1fae5", label="main thread\nenumerate top-level subdirectories"];
+  subgraph cluster_workers {
+    label="worker threads (one per subtree)"; style="filled,rounded"; color="#bfdbfe"; fillcolor="#eff6ff"; fontname="DejaVu Sans";
+    w1 [fillcolor="#dbeafe", label="worker: subtree A\nIDDFS / extension match"];
+    w2 [fillcolor="#dbeafe", label="worker: subtree B"];
+    w3 [fillcolor="#dbeafe", label="worker: subtree C"];
+  }
+  merge [fillcolor="#d1fae5", label="join + merge results\n(synchronized output)"];
+  main->w1; main->w2; main->w3;
+  w1->merge; w2->merge; w3->merge;
+
+  disk [shape=cylinder, fillcolor="#ffe4e6", label="shared physical device"];
+  w1->disk [color="#be123c"]; w2->disk [color="#be123c"]; w3->disk [color="#be123c"];
+
+  caveat [shape=note, style=filled, fillcolor="#fef3c7", fontsize=10,
+    label="Caveat: threads contend for the same spindle.\nOn a single HDD, parallel readdir/stat causes seek thrash —\nconcurrency can be SLOWER than serial. Real wins come on\nSSD/NVMe or when subtrees live on different disks."];
+  disk->caveat [style=invis];
+}
