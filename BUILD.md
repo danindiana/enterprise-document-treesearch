@@ -330,8 +330,8 @@ graph TD
     C -->|Development| D[Local Directory]
     C -->|Production| E[make install]
 
-    D --> D1["./program args"]
-    E --> E1["/usr/local/bin"]
+    D --> D1[Local Execution]
+    E --> E1[System Binaries]
 
     E1 --> F[System-wide Access]
 ```
