@@ -1,4 +1,4 @@
-# Contributing to GPT Enterprise Tree Search
+# Contributing to Enterprise Document Tree Search
 
 Thank you for your interest in contributing to this project! This document provides guidelines and information for contributors.
 
@@ -15,8 +15,8 @@ Thank you for your interest in contributing to this project! This document provi
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/GPT_Enterprise_Treesearch.git
-cd GPT_Enterprise_Treesearch
+git clone https://github.com/yourusername/enterprise-document-treesearch.git
+cd enterprise-document-treesearch
 
 # Build all implementations
 make
