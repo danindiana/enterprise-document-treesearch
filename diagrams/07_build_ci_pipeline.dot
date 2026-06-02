@@ -1,0 +1,27 @@
+digraph build_ci {
+  rankdir=LR; bgcolor="white"; pad=0.4; ranksep=0.5;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Build & CI pipeline";
+  node [fontname="DejaVu Sans", fontsize=10, shape=box, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=9];
+
+  subgraph cluster_local {
+    label="Local (bare metal)"; style="filled,rounded"; color="#a7f3d0"; fillcolor="#ecfdf5"; fontname="DejaVu Sans";
+    clone [fillcolor="#d1fae5", label="git clone"];
+    clean [fillcolor="#d1fae5", label="make clean"];
+    build [fillcolor="#d1fae5", label="make all | quick\ng++ -std=c++17 -O2 (+ -pthread)"];
+    test  [fillcolor="#d1fae5", label="make test\nsmoke tests"];
+    inst  [fillcolor="#bbf7d0", label="sudo make install\n→ /usr/local/bin"];
+    clone->clean->build->test->inst;
+  }
+
+  subgraph cluster_ci {
+    label="GitHub Actions (push / PR)"; style="filled,rounded"; color="#bfdbfe"; fillcolor="#eff6ff"; fontname="DejaVu Sans";
+    trig  [fillcolor="#dbeafe", label="trigger: push / pull_request"];
+    cibld [fillcolor="#dbeafe", label="ubuntu-latest\ninstall deps → make all"];
+    citest[fillcolor="#dbeafe", label="make test + functional check"];
+    art   [fillcolor="#dbeafe", label="upload binary artifacts"];
+    trig->cibld->citest->art;
+  }
+  build->cibld [style=dotted, label="same targets", color="#1d4ed8", constraint=false];
+}

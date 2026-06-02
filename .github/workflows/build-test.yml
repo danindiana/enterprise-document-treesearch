@@ -1,0 +1,47 @@
+name: Build and Test
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y build-essential g++ make
+
+    - name: Build All Programs
+      run: make all
+
+    - name: Run Automated Smoke Tests
+      run: make test
+
+    - name: Run Functional Validation Test
+      run: |
+        mkdir -p /tmp/test_ci
+        touch /tmp/test_ci/test.pdf
+        ./IDDFileSearch_Extension .pdf /tmp/test_ci 1 | grep -q "test.pdf"
+
+    - name: Clean Up Temp Files
+      run: rm -rf /tmp/test_ci
+
+    - name: Upload Binary Artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: compiled-binaries
+        path: |
+          IDDFileSearch
+          IDDFileSearch_ExceptionHandled
+          IDDFileSearch_CmdLine
+          IDDFileSearch_Extension
+          IDDFileSearch_Extension_Concurrent
+          BFSFileSearch

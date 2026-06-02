@@ -1,0 +1,20 @@
+digraph variants {
+  rankdir=LR; bgcolor="white"; pad=0.4; ranksep=0.55; nodesep=0.3;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="The six programs as a deliberate progression\n(what each variant adds)";
+  node [fontname="DejaVu Sans", fontsize=10, shape=box, style="filled,rounded", color="#475569", fillcolor="#dbeafe"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=9];
+
+  v1 [label="IDDFileSearch\nbaseline IDDFS by filename"];
+  v2 [label="…_ExceptionHandled\n+ try/catch around fs ops\n(permission / IO errors)"];
+  v3 [label="…_CmdLine\n+ argv parsing\n(path, target, depth)"];
+  v4 [label="…_Extension\n+ match by extension\n+ explicit max-depth arg", fillcolor="#bfdbfe"];
+  v5 [label="…_Extension_Concurrent\n+ pthreads: parallel subtree search", fillcolor="#a5b4fc"];
+  v1->v2->v3->v4->v5;
+
+  bfs [label="BFSFileSearch\nalternative algorithm\n(level-order)", fillcolor="#fde68a"];
+  v1->bfs [label="branch:\nswap traversal", style=dashed, constraint=false, color="#b45309"];
+
+  ch [label="IterativeDeepening.chpl\nChapel re-implementation\n(language study)", fillcolor="#ede9fe", style="filled,rounded,dashed"];
+  v1->ch [label="port", style=dotted, constraint=false, color="#6d28d9"];
+}

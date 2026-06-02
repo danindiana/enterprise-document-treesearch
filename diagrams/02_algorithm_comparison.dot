@@ -1,0 +1,41 @@
+digraph algo_compare {
+  rankdir=TB; bgcolor="white"; pad=0.4; ranksep=0.5;
+  labelloc="t"; fontsize=20; fontname="DejaVu Sans";
+  label="Core Study — Iterative-Deepening DFS vs Breadth-First Search\nover a directory tree";
+  node [fontname="DejaVu Sans", fontsize=11];
+  edge [fontname="DejaVu Sans", color="#64748b"];
+
+  subgraph cluster_iddfs {
+    label="IDDFS"; style="filled,rounded"; color="#c4b5fd"; fillcolor="#f5f3ff"; fontname="DejaVu Sans";
+    i0 [shape=box,style="filled,rounded",fillcolor="#ede9fe",label="Repeat depth-limited DFS\nlimit = 0, 1, 2, … until match / max depth"];
+    itable [shape=plaintext, label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="6" bgcolor="white">
+      <tr><td bgcolor="#ede9fe"><b>property</b></td><td bgcolor="#ede9fe"><b>IDDFS</b></td></tr>
+      <tr><td align="left">memory</td><td align="left">O(depth) — one path</td></tr>
+      <tr><td align="left">node revisits</td><td align="left">upper levels recomputed each round</td></tr>
+      <tr><td align="left">order found</td><td align="left">shallowest match first</td></tr>
+      <tr><td align="left">best when</td><td align="left">depth unknown, memory tight</td></tr>
+      <tr><td align="left">weak when</td><td align="left">shallow + very wide trees</td></tr>
+      </table>>];
+    i0 -> itable [style=invis];
+  }
+
+  subgraph cluster_bfs {
+    label="BFS"; style="filled,rounded"; color="#93c5fd"; fillcolor="#eff6ff"; fontname="DejaVu Sans";
+    b0 [shape=box,style="filled,rounded",fillcolor="#dbeafe",label="Level-order traversal\nqueue holds the current frontier"];
+    btable [shape=plaintext, label=<
+      <table border="0" cellborder="1" cellspacing="0" cellpadding="6" bgcolor="white">
+      <tr><td bgcolor="#dbeafe"><b>property</b></td><td bgcolor="#dbeafe"><b>BFS</b></td></tr>
+      <tr><td align="left">memory</td><td align="left">O(max width) — whole frontier</td></tr>
+      <tr><td align="left">node revisits</td><td align="left">none</td></tr>
+      <tr><td align="left">order found</td><td align="left">shallowest match first</td></tr>
+      <tr><td align="left">best when</td><td align="left">shallow target, width manageable</td></tr>
+      <tr><td align="left">weak when</td><td align="left">huge fan-out blows memory</td></tr>
+      </table>>];
+    b0 -> btable [style=invis];
+  }
+
+  note [shape=note, style=filled, fillcolor="#fef3c7", fontsize=10,
+        label="Both return the shallowest match first.\nThe trade is recomputation (IDDFS) vs frontier memory (BFS)."];
+  itable -> note [style=invis]; btable -> note [style=invis];
+}

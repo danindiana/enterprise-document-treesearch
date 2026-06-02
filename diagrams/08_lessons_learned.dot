@@ -1,0 +1,23 @@
+digraph lessons {
+  rankdir=LR; bgcolor="white"; pad=0.4; ranksep=0.7; nodesep=0.25;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Lessons Learned";
+  node [fontname="DejaVu Sans", fontsize=10, shape=box, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=9, arrowhead=vee];
+
+  subgraph cluster_obs { label="Observation"; style="filled,rounded"; color="#fecdd3"; fillcolor="#fff1f2"; fontname="DejaVu Sans";
+    o1 [fillcolor="#ffe4e6", label="README described src/ scripts/ chapel/\ndirs that did not exist (flat root)"];
+    o2 [fillcolor="#ffe4e6", label="\"enterprise / production-ready\"\nframing exceeded the substance"];
+    o3 [fillcolor="#ffe4e6", label="concurrent variant not always\nfaster than serial"];
+    o4 [fillcolor="#ffe4e6", label="traversal aborted on first\npermission-denied directory"];
+    o5 [fillcolor="#ffe4e6", label="IDDFS recomputes upper levels\nevery deepening round"];
+  }
+  subgraph cluster_les { label="Lesson"; style="filled,rounded"; color="#a7f3d0"; fillcolor="#ecfdf5"; fontname="DejaVu Sans";
+    l1 [fillcolor="#d1fae5", label="audit the real file tree\nbefore writing docs"];
+    l2 [fillcolor="#d1fae5", label="frame to match reality;\nmodest + accurate reads stronger"];
+    l3 [fillcolor="#d1fae5", label="I/O-bound ≠ CPU-bound —\nmeasure before parallelizing one disk"];
+    l4 [fillcolor="#d1fae5", label="handle fs errors per-entry;\nskip, don't crash (→ _ExceptionHandled)"];
+    l5 [fillcolor="#d1fae5", label="pick algorithm to the tree shape;\ndepth-unknown+tight-mem favors IDDFS"];
+  }
+  o1->l1; o2->l2; o3->l3; o4->l4; o5->l5;
+}

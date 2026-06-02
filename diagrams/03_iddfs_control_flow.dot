@@ -1,0 +1,23 @@
+digraph iddfs_flow {
+  rankdir=TB; bgcolor="white"; pad=0.4; ranksep=0.45;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Iterative-Deepening DFS — control flow";
+  node [fontname="DejaVu Sans", fontsize=11, style="filled,rounded", color="#475569"];
+  edge [fontname="DejaVu Sans", color="#64748b", fontsize=10];
+
+  start [shape=oval, fillcolor="#d1fae5", label="start (root, target, maxDepth)"];
+  init  [shape=box, fillcolor="#eff6ff", label="limit = 0"];
+  dls   [shape=box, fillcolor="#dbeafe", label="Depth-Limited DFS(root, limit)\nrecurse, pruning below 'limit'"];
+  found [shape=diamond, fillcolor="#fef3c7", label="match found\nat this limit?"];
+  ret   [shape=oval, fillcolor="#bbf7d0", label="return match(es)"];
+  max   [shape=diamond, fillcolor="#fef3c7", label="limit == maxDepth?"];
+  inc   [shape=box, fillcolor="#eff6ff", label="limit = limit + 1"];
+  none  [shape=oval, fillcolor="#ffe4e6", label="return: not found"];
+
+  start->init->dls->found;
+  found->ret [label="yes", color="#047857"];
+  found->max [label="no"];
+  max->inc   [label="no"];
+  inc->dls   [label="re-search\n(deeper)", color="#7c3aed"];
+  max->none  [label="yes", color="#be123c"];
+}

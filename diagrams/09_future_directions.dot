@@ -1,0 +1,22 @@
+digraph future {
+  rankdir=TB; bgcolor="white"; pad=0.4; ranksep=0.45; nodesep=0.3;
+  labelloc="t"; fontsize=18; fontname="DejaVu Sans";
+  label="Future Directions";
+  node [fontname="DejaVu Sans", fontsize=10, shape=box, style="filled,rounded", color="#475569", fillcolor="#eff6ff"];
+  edge [style=invis];
+
+  root [shape=oval, fillcolor="#dbeafe", label="roadmap"];
+  subgraph cluster_a { label="Consolidate"; style="filled,rounded"; color="#bfdbfe"; fillcolor="#f8fafc"; fontname="DejaVu Sans";
+    a1[label="merge 6 variants → one CLI\n--algo iddfs|bfs  --concurrent  --ext"]; a2[label="man page + deb / container"];
+  }
+  subgraph cluster_b { label="Capability"; style="filled,rounded"; color="#c4b5fd"; fillcolor="#f8fafc"; fontname="DejaVu Sans";
+    b1[label="content search (grep-like),\nnot just extension"]; b2[label="ignore rules (.gitignore-style)\n+ symlink-loop detection"];
+  }
+  subgraph cluster_c { label="Performance"; style="filled,rounded"; color="#fcd34d"; fillcolor="#f8fafc"; fontname="DejaVu Sans";
+    c1[label="benchmark harness:\nIDDFS/BFS × serial/concurrent\n× HDD/SSD/NVMe (with numbers)"]; c2[label="async I/O (io_uring),\nparallelism tuned per device"];
+  }
+  subgraph cluster_d { label="Credibility"; style="filled,rounded"; color="#86efac"; fillcolor="#f8fafc"; fontname="DejaVu Sans";
+    d1[label="baseline vs find / fd / ripgrep"]; d2[label="unit tests + coverage,\nnot just smoke tests"];
+  }
+  root->a1; root->b1; root->c1; root->d1;
+}

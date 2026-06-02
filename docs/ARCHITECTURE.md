@@ -2,7 +2,7 @@
 
 ## Overview
 
-This document provides detailed architectural information about the GPT Enterprise Tree Search implementation.
+This document provides detailed architectural information about the Enterprise Document Tree Search implementation.
 
 ## Core Algorithms
 

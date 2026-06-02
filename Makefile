@@ -1,4 +1,4 @@
-# Makefile for GPT Enterprise Tree Search
+# Makefile for Enterprise Document Tree Search
 # Compiler settings
 CXX = g++
 CXXFLAGS = -std=c++17 -Wall -Wextra -O2
@@ -85,7 +85,7 @@ scripts:
 
 # Help target
 help:
-	@echo "GPT Enterprise Tree Search - Makefile"
+	@echo "Enterprise Document Tree Search - Makefile"
 	@echo ""
 	@echo "Available targets:"
 	@echo "  all      - Build all C++ implementations (default)"
